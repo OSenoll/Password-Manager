@@ -7,6 +7,22 @@ import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
+def search():
+    website = website_entry.get()
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        print("Json file is missing")
+    else:
+        if website in data:
+            website_data = data[website]
+            mail = website_data["mail"]
+            password = website_data["password"]
+            messagebox.showwarning("INFO", message=f"your mail is:\n {mail}\n your password is\n{password}")
+        else:
+            messagebox.showwarning("ERROR", message="No details for that website is found")
+
 
 def generate_password():
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
@@ -57,8 +73,8 @@ def save():
 
                 json.dump(data, data_file, indent=4)
         finally:
-                website_entry.delete(0, END)
-                password_entry.delete(0, END)
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -81,8 +97,8 @@ password_label = Label(text="Password:")
 password_label.grid(row=3, column=0)
 
 # Entries
-website_entry = Entry(width=35)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = Entry(width=21)
+website_entry.grid(row=1, column=1, )
 website_entry.focus()
 mail_entry = Entry(width=35)
 mail_entry.grid(row=2, column=1, columnspan=2)
@@ -95,5 +111,7 @@ generate_password_button = Button(text="Generate", command=generate_password)
 generate_password_button.grid(row=3, column=2)
 add_button = Button(text="Add", width=36, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
+search_button = Button(text="Search", command=search)
+search_button.grid(row=1, column=2)
 
 window.mainloop()
